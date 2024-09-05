@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 // const compression = require('compression');
+const cors = require('cors'); // Section 226
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -19,6 +20,13 @@ const viewRouter = require('./routes/viewRoutes');
 
 // Start express app
 const app = express();
+
+// Section 226 - Implementing CORS - Cross Origin Resource Sharing
+//-----------------------
+app.use(cors()); // Access-Control-Allow-Origin = * => Meaning all the requests no matter where they are coming from
+
+app.options('*', cors());
+//-----------------------
 
 // Section 176: Setting up Pug in Express
 // Setting up template engine for express app
