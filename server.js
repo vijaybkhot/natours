@@ -38,6 +38,7 @@ process.on('unhandledRejection', (err) => {
   });
 });
 
+// Section 225 - Responding to SIGTERM signal
 process.on('SIGTERM', () => {
   console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
   server.close(() => {
