@@ -115,7 +115,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toString();
-  console.log(req.cookies); // Section 189
+  // console.log(req.cookies); // Section 189
   //   console.log('Hello from the second middleware');
   next();
 });

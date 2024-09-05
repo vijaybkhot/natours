@@ -87,9 +87,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
     },
   ]);
 
-  console.log('Hello from here');
-
-  console.log(stats); // Debugging line to check the output of aggregation
+  // console.log(stats); // Debugging line to check the output of aggregation
 
   // After calculating the nuber or reviews and the average ratings, update the current tour pro
   if (stats.length > 0) {
@@ -115,7 +113,6 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
 reviewSchema.post(/^findOneAnd/, async (doc) => {
   // The hook is triggered after a findOneAndUpdate or findOneAndDelete query is executed.
   // We get the Review model from doc.constructor. doc is the current review document.
-  console.log('Hello from here');
 
   if (doc) {
     // Ensure doc exists before calling calcAverageRatings

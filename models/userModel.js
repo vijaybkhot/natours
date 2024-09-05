@@ -127,7 +127,7 @@ userSchema.methods.createPasswordResetToken = function () {
   // Set a token expiry time, normally 10 minutes
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
-  console.log({ resetToken }, { passwordResetToken: this.passwordResetToken });
+  // console.log({ resetToken }, { passwordResetToken: this.passwordResetToken });
   // Return the unhashed resetToken so that we can send it to the user via email.
   // Once the user accesses the resetToken
   return resetToken;

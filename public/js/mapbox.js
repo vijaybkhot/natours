@@ -6,8 +6,8 @@ const locations = JSON.parse(mapElement.getAttribute('data-locations'));
 // const mapboxAccessToken = mapElement.getAttribute('data-access-token');
 // const mapboxStyleUrl = mapElement.getAttribute('data-style-url');
 
-console.log('Locations:', locations);
-console.log('L:', L);
+// console.log('Locations:', locations);
+// console.log('L:', L);
 
 // // Initialize Mapbox with the access token
 // mapboxgl.accessToken = mapboxAccessToken;

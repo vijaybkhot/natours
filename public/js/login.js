@@ -9,7 +9,7 @@ export const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/v1/users/login',
+      url: '/api/v1/users/login', // Section 222 - Preparing App for deployment - Delete the host. This works only if the api and the website are using the same url
       data: {
         email: email,
         password: password,
@@ -31,7 +31,7 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:8000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
     });
 
     // Check if the response indicates success

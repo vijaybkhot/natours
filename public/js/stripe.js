@@ -10,9 +10,8 @@ const stripe = require('stripe')(
 export const bookTour = async (tourId) => {
   try {
     // 1) Get the checkout session from our API
-    const session = await axios(
-      `http://127.0.0.1:8000/api/v1/bookings/checkout-session/${tourId}`,
-    ); // Get session id using axios
+    const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`); // Get session id using axios
+    // Section 222 - Preparing App for deployment - Delete the host in the url above. This works only if the api and the website are using the same url
     // 2) Create checkout form + charge the credit card
 
     // await stripe.redirectToCheckout({

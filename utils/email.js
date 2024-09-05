@@ -72,7 +72,6 @@ module.exports = class Email {
       };
 
       // 3) Create a transport and send email
-      console.log('Creating email transport...', `${subject}, ${template}`);
       await this.newTransport().sendMail(mailOptions); // sendMail(mailOptions) function is a method provided by the nodemailer library
       //  When we call nodemailer.createTransport() in our newTransport() method, it creates a transporter object. This transporter object has a method called sendMail(), which is used to send an email with the specified options.
     } catch (error) {

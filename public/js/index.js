@@ -46,8 +46,6 @@ if (userDataForm) {
     form.append('email', document.querySelector('#email').value);
     form.append('photo', document.querySelector('#photo').files[0]);
 
-    console.log(form);
-
     updateSettings(form, 'data');
   });
 }
@@ -62,7 +60,6 @@ if (passwordUpdateForm) {
     const newPassword = document.querySelector('#password').value;
     const newPasswordConfirm =
       document.querySelector('#password-confirm').value;
-    console.log(passwordCurrent, newPassword, newPasswordConfirm);
 
     updateSettings(
       {

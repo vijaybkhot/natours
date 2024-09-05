@@ -52,7 +52,7 @@ const sendErrorDev = (err, req, res) => {
 
 // Send error in production enviornment
 const sendErrorProduction = (err, req, res) => {
-  console.log('Environment:', process.env.NODE_ENV);
+  // console.log('Environment:', process.env.NODE_ENV);
   // A) API
   if (req.originalUrl.startsWith('/api')) {
     // A) Operational, trusted error: send message to client
@@ -76,7 +76,6 @@ const sendErrorProduction = (err, req, res) => {
   // A) Operational, trusted error: send message to client
 
   if (err.isOperational) {
-    console.log('Error:', err);
     return res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
       msg: err.message,
