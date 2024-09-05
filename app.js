@@ -16,6 +16,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes'); // Section 211 - Integrating Stripe to the Back-End
 const viewRouter = require('./routes/viewRoutes');
 
+// Start express app
 const app = express();
 
 // Section 176: Setting up Pug in Express
