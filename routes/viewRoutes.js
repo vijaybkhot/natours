@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get(
   '/',
-  bookingController.createBookingCheckout, // Section 214 - Temporary Solution
+  // bookingController.createBookingCheckout, // Section 214 - Temporary Solution
   authController.isLoggedIn,
   viewsController.getOverview,
 ); // The initial home page

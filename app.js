@@ -16,6 +16,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes'); // Section 211 - Integrating Stripe to the Back-End
+const bookingController = require('./controllers/bookingController'); // Section 227 - Stripe Webhooks
 const viewRouter = require('./routes/viewRoutes');
 
 // Start express app
@@ -84,6 +85,20 @@ const limiter = rateLimit({
 // We can use the above middleware function using app.use().
 // To limit the access to the api route, we specify the route on which the middleware is used i.e. api.
 app.use('/api', limiter);
+
+// Section 227 - Payments with Stripe webhooks
+//----------------------------------
+// Why do we need this method here in app.js and not in bookingController.js
+// => Because, stirpe checkout requires data/body in raw format.  Hence, to get it in raw format, we use the post method here before the body is parsed into JSON in the next lines of code.
+app.post(
+  '/webhook-chekcout',
+  express.raw({ type: 'application/json' }), // This middleware is used to parse the incoming request body as raw data (i.e., a Buffer) rather than parsing it into a JavaScript object as Express normally does with express.json().
+  // { type: 'application/json' } specifies that this middleware should be applied to requests where the Content-Type header is set to application/json.
+  bookingController.webhookCheckout,
+);
+
+// Webhooks are external callbacks from services like Stripe, and they often require the raw body to verify the authenticity of the request using a signature (e.g., using a Stripe-Signature header). If we parse the body into a JavaScript object, the signature verification might fail, so using express.raw() ensures the body remains untouched.
+//----------------------------------
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // Middleware
