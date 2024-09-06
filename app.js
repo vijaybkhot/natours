@@ -91,7 +91,7 @@ app.use('/api', limiter);
 // Why do we need this method here in app.js and not in bookingController.js
 // => Because, stirpe checkout requires data/body in raw format.  Hence, to get it in raw format, we use the post method here before the body is parsed into JSON in the next lines of code.
 app.post(
-  '/webhook-chekcout',
+  '/webhook-checkout',
   express.raw({ type: 'application/json' }), // This middleware is used to parse the incoming request body as raw data (i.e., a Buffer) rather than parsing it into a JavaScript object as Express normally does with express.json().
   // { type: 'application/json' } specifies that this middleware should be applied to requests where the Content-Type header is set to application/json.
   bookingController.webhookCheckout,
