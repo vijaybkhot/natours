@@ -88,7 +88,7 @@ exports.deleteBooking = factory.deleteOne(Booking);
 const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id; // tourId
   const user = (await User.findOne({ email: session.customer_email })).id; // userId
-  const price = session.amount_total / 100;
+  const price = session.amount_total / 100; // Convert from cents to dollars
   await Booking.create({ tour, user, price });
 };
 exports.webhookCheckout = (req, res, next) => {
@@ -98,9 +98,11 @@ exports.webhookCheckout = (req, res, next) => {
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
-      signature.process.env.STRIPE_WEBHOOK_SECRET,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
+    console.error(`⚠️  Webhook signature verification failed.`, err.message);
     return res.status(400).send(`Webhook error: ${err.message}`); // Send the error to Stripe. Stripe will receive the response because Stripe has called the url which inturn calls the current function.
   }
 
