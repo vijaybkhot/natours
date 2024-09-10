@@ -7,7 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
-// const compression = require('compression');
+const compression = require('compression');
 const cors = require('cors'); // Section 226
 
 const AppError = require('./utils/appError');
@@ -135,6 +135,8 @@ app.use(
     ], // We whitelist or exclude the parameters for which we want to allow duplicate values
   }),
 );
+
+app.use(compression());
 
 // Test middleware
 app.use((req, res, next) => {
