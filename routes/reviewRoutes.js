@@ -10,11 +10,14 @@ const router = express.Router({ mergeParams: true });
 
 router.use(authController.protect); // Only logged in users allowed
 
-router.route('/').get(reviewController.getAllReviews).post(
-  authController.restrictTo('user'),
-  reviewController.setTourUserIds, // A middleware to set tour and user ids
-  reviewController.createReview,
-);
+router
+  .route('/')
+  .get(reviewController.getAllReviews)
+  .post(
+    authController.restrictTo('user'),
+    reviewController.checkBookingBeforReview,
+    reviewController.createReview,
+  );
 
 router
   .route('/:id')

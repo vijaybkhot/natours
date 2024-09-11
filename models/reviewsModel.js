@@ -47,22 +47,22 @@ reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 // Populate middleware:
 // Keep in mind that the populate middleware will effect the performance of the query, because it adds additional queries.
 reviewSchema.pre(/^find/, function (next) {
-  //   // Using the .populate method, we populate the entire document of the user and tours in the output of the queried review.
-  //   // The 'this' always points to the current query
-  //   this.populate({
-  //     path: 'user', // Populate this field with the entire user document of the corresponding user_id inside guides array
-  //     select: 'name photo', // Display only name and photo of the user. We do not want to leak any other private data about the user. Remember, there is no comma in between!
-  //   }).populate({
-  //     path: 'tour',
-  //     select: 'name', // Display only name. Remember, there is no comma in between!
-  //   });
-
   // Using the .populate method, we populate the entire document of the user and tours in the output of the queried review.
-  // We are turning off the populate for tour. This is because populating reviews inside a tour and then again populating a tour inside the reiew is inefficient.
+  // The 'this' always points to the current query
   this.populate({
     path: 'user', // Populate this field with the entire user document of the corresponding user_id inside guides array
     select: 'name photo', // Display only name and photo of the user. We do not want to leak any other private data about the user. Remember, there is no comma in between!
+  }).populate({
+    path: 'tour',
+    select: 'name -guides', // Display only name. Remember, there is no comma in between!
   });
+
+  // // Using the .populate method, we populate the entire document of the user and tours in the output of the queried review.
+  // // We are turning off the populate for tour. This is because populating reviews inside a tour and then again populating a tour inside the reiew is inefficient.
+  // this.populate({
+  //   path: 'user', // Populate this field with the entire user document of the corresponding user_id inside guides array
+  //   select: 'name photo', // Display only name and photo of the user. We do not want to leak any other private data about the user. Remember, there is no comma in between!
+  // });
 
   next();
 });
