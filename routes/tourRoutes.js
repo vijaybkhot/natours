@@ -1,7 +1,8 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
-const reviewRouter = require('./reviewRoutes');
+const reviewRoutes = require('./reviewRoutes');
+const bookingRoutes = require('./bookingRoutes');
 
 const router = express.Router();
 
@@ -14,14 +15,20 @@ const router = express.Router();
 // // Nested route for review routes inside tour route.
 // // Nested routes. We are nesting the reviews routes to the tour route. By doing so, we will already have the tour id in the params.
 
-// Ideal use of nester routes:
-// In case of /:tourId.reviews use the reviewRouter
+// Ideal use of nested routes:
+// In case of /:tourId.reviews use the reviewRoutes
 // router is just a middleware. It is actually mountig an URL
-router.use('/:tourId/reviews', reviewRouter);
+router.use('/:tourId/reviews', reviewRoutes);
 
+// Nested route to access bookings for a particular tour
+router.use('/:tourId/bookings', bookingRoutes);
+
+// Section 100 - Aliasing
+//---------------------------
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
+//---------------------------
 
 router.route('/tour-stats').get(tourController.getTourStats);
 router

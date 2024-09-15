@@ -1,8 +1,12 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
+const bookingRoutes = require('../routes/bookingRoutes'); // Section 217 - Implementing nested routes for users/bookings
 
 const router = express.Router();
+
+// Nested route to access bookings for a particular user
+router.use('/:userId/bookings', bookingRoutes);
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);

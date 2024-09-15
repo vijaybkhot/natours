@@ -71,6 +71,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
 // ---------------------
 
+// Section 100 - Aliasing
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = 'ratingsAverage,price';

@@ -68,12 +68,22 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 // A middleware to set Tour and User ids from the parameters if not provided in the req.body
 // This will run before the createReview function, setting the tour and user ids.
-exports.setTourUserIds = (req, res, next) => {
-  // Allow nested routes
-  if (!req.body.tour) req.body.tour = req.params.tourId; // We get the tourId from the params field because of the nested routes
-  if (!req.body.user) req.body.user = req.user.id; // We get user from the protect middleware
+exports.setTourUserIds = catchAsync(async (req, res, next) => {
+  // Allow nested routes for tours/bookings
+  if (!req.body.tour && req.params.tourId) req.body.tour = req.params.tourId; // We get the tourId from the params field because of the nested routes
+
+  // Allow nested routes for users/bookings. If there is no userId in the body, get it from the parameters
+  if (!req.body.user && req.params.userId) req.body.user = req.params.userId;
+  // If there is no userId in parameters either, get it from req.user which we get from authController.protect function
+  if (!req.body.user && !req.params.userId) req.body.user = req.user.id;
+
+  // This assignment only applies when creating a new Booking
+  if (req.method === 'POST' && req.body.tour && !req.body.price)
+    req.body.price = (await Tour.findById(req.body.tour)).price; // Get the price of the tour from the tour itself. This will execute only on the POST request. For the GET request we do not need the price in body
+
   next();
-};
+});
+
 exports.getAllBookings = factory.getAll(Booking);
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);

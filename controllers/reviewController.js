@@ -7,7 +7,9 @@ const AppError = require('../utils/appError');
 
 // Section 217 - Restrict user to post a review only to the tour they have booked
 exports.checkBookingBeforReview = async (req, res, next) => {
+  // Allow nested routes
   req.body.user = req.user.id;
+  if (!req.body.tour) req.body.tour = req.params.tourId;
   // 1) Find all the bookings for the logged in user
   const bookings = await Booking.find({ user: req.user.id });
 
