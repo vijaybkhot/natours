@@ -43,6 +43,7 @@ Natours
 ├── server.js              # Server configuration and initialization
 └── package.json           # Project dependencies and scripts
 
+
 ---
 
 
