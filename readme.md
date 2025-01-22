@@ -45,6 +45,7 @@ Natours
 
 ---
 
+
 ## ✨ Key Functionalities
 1. Authentication & Authorization
 	•	User sign-up, log-in, and password reset.
