@@ -54,11 +54,14 @@
 
 ## Prerequisites
 • Node.js and npm installed on your machine.
+
 • MongoDB installed locally or use MongoDB Atlas for cloud storage.
 
 ---
 
 ## 🤝 Acknowledgments
 • Jonas Schmedtmann for his amazing course and guidance.
+
 • Stripe API for seamless payment integration.
+
 • Leaflet.js for interactive maps.
