@@ -28,21 +28,6 @@
 - **Version Control**: Git, GitHub  
 - **Architecture**: MVC (Model-View-Controller)  
 
----
-
-## 📂 Project Structure  
-```bash
-Natours
-├── controllers/           # Controllers for handling API requests
-├── models/                # Mongoose models for users, tours, bookings, etc.
-├── public/                # Static assets (CSS, images, etc.)
-├── routes/                # Route definitions for API endpoints
-├── views/                 # Pug.js templates for server-side rendering
-├── utils/                 # Utility functions (email, error handling, etc.)
-├── app.js                 # Main application file
-├── server.js              # Server configuration and initialization
-└── package.json           # Project dependencies and scripts
-
 
 ---
 
@@ -70,6 +55,8 @@ Natours
 ## Prerequisites
 	•	Node.js and npm installed on your machine.
 	•	MongoDB installed locally or use MongoDB Atlas for cloud storage.
+
+---
 
 ## 🤝 Acknowledgments
 	•	Jonas Schmedtmann for his amazing course and guidance.
