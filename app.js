@@ -1,23 +1,23 @@
-const path = require('path');
-const express = require('express');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
-const cookieParser = require('cookie-parser');
-const compression = require('compression');
-const cors = require('cors'); // Section 226
+import path from 'path';
+import express from 'express';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import hpp from 'hpp';
+import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import cors from 'cors'; // Section 226
 
-const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
-const reviewRouter = require('./routes/reviewRoutes');
-const bookingRouter = require('./routes/bookingRoutes'); // Section 211 - Integrating Stripe to the Back-End
-const bookingController = require('./controllers/bookingController'); // Section 227 - Stripe Webhooks
-const viewRouter = require('./routes/viewRoutes');
+import AppError from './utils/appError.js';
+import globalErrorHandler from './controllers/errorController.js';
+import tourRouter from './routes/tourRoutes.js';
+import userRouter from './routes/userRoutes.js';
+import reviewRouter from './routes/reviewRoutes.js';
+import bookingRouter from './routes/bookingRoutes.js'; // Section 211 - Integrating Stripe to the Back-End
+import * as bookingController from './controllers/bookingController.js'; // Section 227 - Stripe Webhooks
+import viewRouter from './routes/viewRoutes.js';
 
 // Start express app
 const app = express();
@@ -32,6 +32,8 @@ app.options('*', cors());
 // Section 176: Setting up Pug in Express
 // Setting up template engine for express app
 app.set('view engine', 'pug');
+// Get the directory name using import.meta.url
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) Global Middlewares
@@ -160,4 +162,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+export default app;

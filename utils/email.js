@@ -1,13 +1,13 @@
-const nodemailer = require('nodemailer');
-const pug = require('pug');
-const htmlToText = require('html-to-text');
+import nodemailer from 'nodemailer';
+import pug from 'pug';
+import { htmlToText } from 'html-to-text';
 
 // Section 206 - Building a complex email Handler
 // -------------------------------------
 // new Email(user, url).sendWelcome()
 
 // An email class from which we can create email objects that we can then use to send actual emails
-module.exports = class Email {
+export default class Email {
   // To create a new email object, we pass in a user and a url
   constructor(user, url) {
     this.to = user.email;
@@ -92,7 +92,7 @@ module.exports = class Email {
       'Your password reset token (valid for only 10 minutes)',
     ); // 'passwordReset' is a pug template
   }
-};
+}
 
 // -------------------------------------
 

@@ -1,9 +1,9 @@
-const multer = require('multer'); // Section 199 // Section  200  - Upload image/file
-const sharp = require('sharp'); // Section 202 - Resize images
-const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
-const factory = require('./handlerFactory');
+import multer from 'multer'; // Section 199 // Section 200 - Upload image/file
+import sharp from 'sharp'; // Section 202 - Resize images
+import User from '../models/userModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import AppError from '../utils/appError.js';
+import * as factory from './handlerFactory.js';
 
 // // Section 200 - Configuring Multer - Storage
 // // Definition of how we want to store our file. Definition and file name
@@ -41,10 +41,10 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 // In case where there is no file uploaded - Multer doesn’t throw an error; it just skips the file handling part and doesn’t add anything to req.file.
-exports.uploadUserPhoto = upload.single('photo'); // Single - because we upload only one single image. 'photo' name of the field in the form or database.
+export const uploadUserPhoto = upload.single('photo'); // Single - because we upload only one single image. 'photo' name of the field in the form or database.
 
 // Section 202 - Resizing Images
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+export const resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`; // Set this new attribute for filename. We need it to set the photo field in the userdata and also use it in updateMe route handler
@@ -73,12 +73,12 @@ const filterObj = (obj, ...allowedFields) => {
 // getMe function
 // Similar to getOne, but instead of getting the userId from the URL parameters, we get the userId from the current user data from the currently logged in user
 // We get the data of the curretly logged in user from the authController.protect.
-exports.getMe = (req, res, next) => {
+export const getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+export const updateMe = catchAsync(async (req, res, next) => {
   // Section 199 - Upload Images - Update
 
   // 1) Create error if user POSTs password data. i.e. Create error if user posts password data
@@ -122,7 +122,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 // Delete the user. We allow the user to delte their account.
 // In reality, we actually do not delete the account from the database. We just hide the account from the user,
 // by setting active property to false. We do so that we may use the user data in the future.
-exports.deleteMe = catchAsync(async (req, res, next) => {
+export const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(204).json({
     status: 'success',
@@ -130,16 +130,16 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createUser = (req, res) => {
+export const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not defined! Please use /signup instead.',
   });
 };
 
-exports.getAllUsers = factory.getAll(User);
-exports.getUser = factory.getOne(User);
+export const getAllUsers = factory.getAll(User);
+export const getUser = factory.getOne(User);
 // Update user function only for administrators
 // Do not attempt to change or update passwords with this!!! Because, passwords are supposed to be updated by admins only. findByIdAndUpdate() does not run any pre save middlewares hence no protection is provided for authorization.
-exports.updateUser = factory.updateOne(User);
-exports.deleteUser = factory.deleteOne(User);
+export const updateUser = factory.updateOne(User);
+export const deleteUser = factory.deleteOne(User);

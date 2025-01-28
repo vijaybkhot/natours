@@ -1,20 +1,24 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Tour = require('../models/tourModel');
-const User = require('../models/userModel');
-const Booking = require('../models/bookingModel');
-const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
-const factory = require('./handlerFactory');
+import dotenv from 'dotenv';
+import Stripe from 'stripe';
+import Tour from '../models/tourModel.js';
+import User from '../models/userModel.js';
+import Booking from '../models/bookingModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
+import * as factory from './handlerFactory.js';
+
+dotenv.config();
 
 // Section 211 -Integrating Stripe into the Backend
 // ---------------------------
-exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+export const getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
 
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
   }
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   // 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
@@ -68,7 +72,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 // A middleware to set Tour and User ids from the parameters if not provided in the req.body
 // This will run before the createReview function, setting the tour and user ids.
-exports.setTourUserIds = catchAsync(async (req, res, next) => {
+export const setTourUserIds = catchAsync(async (req, res, next) => {
   // Allow nested routes for tours/bookings
   if (!req.body.tour && req.params.tourId) req.body.tour = req.params.tourId; // We get the tourId from the params field because of the nested routes
 
@@ -84,11 +88,11 @@ exports.setTourUserIds = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.getAllBookings = factory.getAll(Booking);
-exports.createBooking = factory.createOne(Booking);
-exports.getBooking = factory.getOne(Booking);
-exports.updateBooking = factory.updateOne(Booking);
-exports.deleteBooking = factory.deleteOne(Booking);
+export const getAllBookings = factory.getAll(Booking);
+export const createBooking = factory.createOne(Booking);
+export const getBooking = factory.getOne(Booking);
+export const updateBooking = factory.updateOne(Booking);
+export const deleteBooking = factory.deleteOne(Booking);
 
 // ------------------------------------------------------
 
@@ -101,7 +105,9 @@ const createBookingCheckout = async (session) => {
   const price = session.amount_total / 100; // Convert from cents to dollars
   await Booking.create({ tour, user, price });
 };
-exports.webhookCheckout = (req, res, next) => {
+
+export const webhookCheckout = catchAsync(async (req, res, next) => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature']; // Read stripe signature out of our headers
 
   let event;
@@ -117,8 +123,9 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   if (event.type === 'checkout.session.completed')
-    createBookingCheckout(event.data.object);
+    await createBookingCheckout(event.data.object);
 
   res.status(200).json({ received: true });
-};
+});
+
 //----------------------------------

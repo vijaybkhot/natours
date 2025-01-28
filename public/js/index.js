@@ -1,13 +1,15 @@
 /* eslint-disable */
 import '@babel/polyfill';
-import { displayMap } from './leaflet';
-import { login, logout } from './login';
-import { updateSettings } from './updateSettings';
-import { bookTour } from './stripe'; // Section 212 - Processing payments on the frontend
+import { displayMap } from './leaflet.js';
+import { login, logout } from './login.js';
+import { signup, validateFields } from './signup.js';
+import { updateSettings } from './updateSettings.js';
+import { bookTour } from './stripe.js'; // Section 212 - Processing payments on the frontend
 
 // DOM Elements
 const mapElement = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
+const signupForm = document.querySelector('.form--signup');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const passwordUpdateForm = document.querySelector('.form-user-password');
@@ -19,7 +21,6 @@ if (mapElement) {
   const locations = JSON.parse(mapElement.getAttribute('data-locations'));
   displayMap(locations);
 }
-
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -29,6 +30,26 @@ if (loginForm) {
     const password = document.getElementById('password').value;
 
     login(email, password);
+  });
+}
+
+if (signupForm) {
+  signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('in signup form');
+
+    // Values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Validate fields
+    if (!validateFields(name, email, password, confirmPassword)) {
+      return;
+    }
+
+    signup(name, email, password, confirmPassword);
   });
 }
 
@@ -77,6 +98,7 @@ if (bookBtn) {
   bookBtn.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...'; // Change button text content
     const tourId = e.target.dataset.tourId; //
+    console.log('tourId:', tourId);
     bookTour(tourId);
   });
 }

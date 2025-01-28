@@ -1,12 +1,11 @@
-const Review = require('../models/reviewsModel');
-const Booking = require('../models/bookingModel');
-// const catchAsync = require('../utils/catchAsync');
-const factory = require('./handlerFactory');
-
-const AppError = require('../utils/appError');
+import Review from '../models/reviewsModel.js';
+import Booking from '../models/bookingModel.js';
+// import catchAsync from '../utils/catchAsync'; // Un-comment if needed
+import * as factory from './handlerFactory.js';
+import AppError from '../utils/appError.js';
 
 // Section 217 - Restrict user to post a review only to the tour they have booked
-exports.checkBookingBeforReview = async (req, res, next) => {
+export const checkBookingBeforReview = async (req, res, next) => {
   // Allow nested routes
   req.body.user = req.user.id;
   if (!req.body.tour) req.body.tour = req.params.tourId;
@@ -49,8 +48,8 @@ exports.checkBookingBeforReview = async (req, res, next) => {
   next();
 };
 
-exports.getAllReviews = factory.getAll(Review);
-exports.getReview = factory.getOne(Review);
-exports.createReview = factory.createOne(Review);
-exports.updateReview = factory.updateOne(Review);
-exports.deleteReview = factory.deleteOne(Review);
+export const getAllReviews = factory.getAll(Review);
+export const getReview = factory.getOne(Review);
+export const createReview = factory.createOne(Review);
+export const updateReview = factory.updateOne(Review);
+export const deleteReview = factory.deleteOne(Review);

@@ -1,11 +1,17 @@
-const fs = require('fs');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const Tour = require('../../models/tourModel');
-const User = require('../../models/userModel');
-const Review = require('../../models/reviewsModel');
+import fs from 'fs';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import Tour from '../../models/tourModel.js';
+import User from '../../models/userModel.js';
+import Review from '../../models/reviewsModel.js';
 
 dotenv.config({ path: './config.env' });
+
+// Get __dirname equivalent in ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',

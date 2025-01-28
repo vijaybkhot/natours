@@ -32,12 +32,16 @@ export const logout = async () => {
     const res = await axios({
       method: 'GET',
       url: '/api/v1/users/logout',
+      withCredentials: true,
     });
 
     // Check if the response indicates success
     if (res.data.status === 'success') {
       // Reload the page to reflect the logout status
-      window.location.reload(true);
+      showAlert('success', 'Logged out Successfully!');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
     } else {
       // Handle unexpected success status
       showAlert('error', 'Error logging out! Try again');

@@ -1,9 +1,9 @@
-const multer = require('multer'); // Section 204  Upload multiple images/files
-const sharp = require('sharp'); // Section 204  Upload multiple images/files
-const Tour = require('../models/tourModel');
-const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
-const factory = require('./handlerFactory');
+import multer from 'multer'; // Section 204  Upload multiple images/files
+import sharp from 'sharp'; // Section 204  Upload multiple images/files
+import Tour from '../models/tourModel.js';
+import AppError from '../utils/appError.js';
+import catchAsync from '../utils/catchAsync.js';
+import * as factory from './handlerFactory.js';
 
 // Section 204 + 205 Upload and resize/process multiple images/files
 // ---------------------
@@ -22,7 +22,7 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadTourImages = upload.fields([
+export const uploadTourImages = upload.fields([
   // req.files
   { name: 'imageCover', maxCount: 1 },
   { name: 'images', maxCount: 3 },
@@ -31,7 +31,7 @@ exports.uploadTourImages = upload.fields([
 // upload.single('image'); // When uploading just a single image - req.file
 // upload.array('images', 5);  // When uploading multilple images for the same field - req.files
 
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
+export const resizeTourImages = catchAsync(async (req, res, next) => {
   // Section 205 - Resizing Images
   if (!req.files.imageCover || !req.files.images) return next();
 
@@ -72,7 +72,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 // ---------------------
 
 // Section 100 - Aliasing
-exports.aliasTopTours = (req, res, next) => {
+export const aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = 'ratingsAverage,price';
   req.query.fields = 'name,price,ratingsAverage,duration,summary,difficulty';
@@ -80,13 +80,13 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = factory.getAll(Tour);
-exports.getTour = factory.getOne(Tour, { path: 'reviews' });
-exports.createTour = factory.createOne(Tour);
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+export const getAllTours = factory.getAll(Tour);
+export const getTour = factory.getOne(Tour, { path: 'reviews' });
+export const createTour = factory.createOne(Tour);
+export const updateTour = factory.updateOne(Tour);
+export const deleteTour = factory.deleteOne(Tour);
 
-exports.getTourStats = catchAsync(async (req, res, next) => {
+export const getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
       $match: { ratingsAverage: { $gte: 4.5 } },
@@ -113,7 +113,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+export const getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1; // 2021
   const plan = await Tour.aggregate([
     {
@@ -157,7 +157,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
 });
 
 // Section 171: Geospatial queries - Async handler for getting tours within a certain distance from a center point
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+export const getToursWithin = catchAsync(async (req, res, next) => {
   // Extract distance, latlng (latitude and longitude), and unit (mi or km) from the URL parameters
   const { distance, latlng, unit } = req.params;
 
@@ -203,7 +203,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
 // Section 172: Geospatial aggregation - Calculating Distances from a point
 // Async handler for calculating distances from a point to various tours
 
-exports.getDistances = catchAsync(async (req, res, next) => {
+export const getDistances = catchAsync(async (req, res, next) => {
   // Extract distance, latlng (latitude and longitude), and unit (mi or km) from the URL parameters
   const { latlng, unit } = req.params;
 

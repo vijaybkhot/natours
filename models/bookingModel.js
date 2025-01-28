@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Section 213 - Modelling the Bookings
 //-------------------------------------
@@ -39,4 +39,4 @@ bookingSchema.pre(/^find/, function (next) {
 
 const Booking = mongoose.model('Booking', bookingSchema);
 
-module.exports = Booking;
+export default Booking;

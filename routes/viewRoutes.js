@@ -1,7 +1,7 @@
-const express = require('express');
-const viewsController = require('../controllers/viewsController');
-const authController = require('../controllers/authController');
-const bookingController = require('../controllers/bookingController');
+import express from 'express';
+import * as viewsController from '../controllers/viewsController.js';
+import * as authController from '../controllers/authController.js';
+import * as bookingController from '../controllers/bookingController.js';
 
 const router = express.Router();
 
@@ -19,6 +19,8 @@ router.get('/tours/:slug', authController.isLoggedIn, viewsController.getTour);
 
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 
+router.get('/signup', authController.isLoggedIn, viewsController.getSignupForm);
+
 // Section 194 - Building the account page
 router.get('/me', authController.protect, viewsController.getAccount);
 
@@ -32,4 +34,4 @@ router.post(
   viewsController.updateUserData,
 );
 
-module.exports = router;
+export default router;

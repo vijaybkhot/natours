@@ -1,7 +1,7 @@
-const express = require('express');
-const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
-const bookingRoutes = require('../routes/bookingRoutes'); // Section 217 - Implementing nested routes for users/bookings
+import express from 'express';
+import * as userController from '../controllers/userController.js';
+import * as authController from '../controllers/authController.js';
+import bookingRoutes from '../routes/bookingRoutes.js'; // Section 217 - Implementing nested routes for users/bookings
 
 const router = express.Router();
 
@@ -51,4 +51,4 @@ router
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
-module.exports = router;
+export default router;
