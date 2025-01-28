@@ -12,7 +12,7 @@ export const signup = async (name, email, password, confirmPassword) => {
         name: name,
         email: email,
         password: password,
-        passwordConfirm: passwordConfirm,
+        passwordConfirm: confirmPassword,
         role: 'user',
       },
     });

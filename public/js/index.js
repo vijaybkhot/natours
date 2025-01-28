@@ -36,8 +36,6 @@ if (loginForm) {
 if (signupForm) {
   signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('in signup form');
-
     // Values
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;

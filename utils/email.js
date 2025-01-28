@@ -1,6 +1,12 @@
 import nodemailer from 'nodemailer';
 import pug from 'pug';
 import { htmlToText } from 'html-to-text';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Get the current directory of the module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Section 206 - Building a complex email Handler
 // -------------------------------------
@@ -16,14 +22,13 @@ export default class Email {
     this.from = `Vijay Khot <${process.env.EMAIL_FROM}>`;
   }
 
-  // Create different transports for different enviornments
+  // Create different transports for different environments
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       // Section 209 - Using Sendgrid for 'Real' Emails
       // Configure SendGrid SMTP
       return nodemailer.createTransport({
         service: 'SendGrid',
-        // host: 'smtp-relay.brevo.com', // Brevo's SMTP host
         host: 'smtp.sendgrid.net', // SendGrid SMTP server,
         port: 587, // Typically, 587 is used for TLS connections
         auth: {
@@ -38,14 +43,12 @@ export default class Email {
     }
 
     return nodemailer.createTransport({
-      // service: 'Gmail',
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
-      // Activate in gmail "less secure app" option
     });
   }
 
@@ -68,12 +71,11 @@ export default class Email {
         to: this.to,
         subject: subject,
         html: html,
-        text: htmlToText.convert(html), // Just an option if someone wants to send plain text. We convert the HTML to plain text
+        text: htmlToText(html),
       };
 
       // 3) Create a transport and send email
       await this.newTransport().sendMail(mailOptions); // sendMail(mailOptions) function is a method provided by the nodemailer library
-      //  When we call nodemailer.createTransport() in our newTransport() method, it creates a transporter object. This transporter object has a method called sendMail(), which is used to send an email with the specified options.
     } catch (error) {
       console.error('Error sending email:', error);
     }
@@ -93,31 +95,3 @@ export default class Email {
     ); // 'passwordReset' is a pug template
   }
 }
-
-// -------------------------------------
-
-// const sendEmail = async (options) => {
-//   // 1) Create a transporter
-//   const transporter = nodemailer.createTransport({
-//     // service: 'Gmail',
-//     host: process.env.EMAIL_HOST,
-//     port: process.env.EMAIL_PORT,
-//     auth: {
-//       user: process.env.EMAIL_USERNAME,
-//       pass: process.env.EMAIL_PASSWORD,
-//     },
-//     // Activate in gmail "less secure app" option
-//   });
-//   // 2) Define the email options
-//   const mailOptions = {
-//     from: 'Vijay Khot <hello@vijay.io>',
-//     to: options.email,
-//     subject: options.subject,
-//     text: options.message,
-//     //html:
-//   };
-//   // 3) Actually send the email
-//   await transporter.sendMail(mailOptions);
-// };
-
-// module.exports = sendEmail;
